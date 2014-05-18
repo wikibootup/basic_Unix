@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
 	char buf[BUFSIZ];
 
 	char *fileName = argv[1];
+	int i;//pointer index
+	unsigned int cnt = 1;//line number
 
 	fd = open(fileName, O_RDONLY);
 	if(fd == -1) {
@@ -31,7 +33,22 @@ int main(int argc, char *argv[])
 	}
 
 	buf[n] = '\0';
-	printf("%s", buf);
+
+	if( (*(buf+i) != '\0' && i < n) )
+		printf("%2u ", cnt++);
+	
+	while(i < n) {
+		//13 is CR,
+		if(*(buf + i) != (char)10) {
+			printf("%c", (char)(*(buf + i++)) );
+		}
+		else {
+			printf("%c", (char)(*(buf + i++)) );
+			if(i < n)
+				printf("%2u ", cnt++);
+		}
+	}
+
 	close(fd);
 
 	return 0;
