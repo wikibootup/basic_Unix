@@ -21,16 +21,9 @@ int main(int argc, char *argv[])
 {	
 	char buf[BUFSIZ];
 	char result[BUFSIZ];
-//	char **env;
-//	char thisPID[20];
 
 	int fd, n;
 	int i = 0;
-
-//	FILE *rfp;
-//	char result[BUFSIZ];
-//	char buf[BUFSIZ];
-
 
 	if(argc == 1){
 			sprintf(buf, "%d", (int)getpid() );
@@ -41,22 +34,8 @@ int main(int argc, char *argv[])
 		printf("USAGE : <%s> OR <%s [procNUM]\n", argv[0], argv[0]);
 	}
 
-//sprintf(result, "ADD1 %s ADD2", buf);
 	sprintf(result, "/proc/%s/environ", buf);
-//	printf("%s\n", result);	
-/*
-	if( (rfp = fopen(result, "r")) == NULL) {
-		perror("fopen : unix.txt");
-		exit(1);
-	}
 	
-	while(fgets(buf, BUFSIZ, rfp) != NULL) {
-		fputs(buf, rfp);
-	}
-	
-	fclose(rfp);
-
-*/
 	fd = open(result, O_RDONLY);	
 	if(fd == -1) {
 		perror("Open");
@@ -68,12 +47,11 @@ int main(int argc, char *argv[])
 		perror("Read");
 		exit(1);
 	}
-//	printf("%d", n);
+
 	buf[n] = '\0';		
-//	printf("%s\n\n\n", buf);
 
 	while(i < n) {
-		if(*(buf + i) != '\n') {
+		if(*(buf + i) != (int)NULL) {
 			printf("%c", *(buf + i++));
 		}
 		else {
@@ -83,7 +61,6 @@ int main(int argc, char *argv[])
 	}	
 	printf("\n");
 	
-//	printf("RESULT : %s\n", result);
 	close(fd);
 
 	return 0;
