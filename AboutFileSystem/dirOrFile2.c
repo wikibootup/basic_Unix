@@ -2,13 +2,15 @@
 //for opendir(3), closedir(3)
 #include <sys/types.h>
 #include <dirent.h>
-//for exit(1), stat()
+//for exit(1)
 #include <stdlib.h>
+//for stat()
+#include <sys/stat.h>
 
 int main(int argc, char *argv[]) {
 	DIR *dp;
 	struct dirent *dent;
-	struc stat buf;
+	struct stat buf;
 	int kind;
 	
 	if((dp = opendir(".")) == NULL) {
@@ -19,7 +21,7 @@ int main(int argc, char *argv[]) {
 	while((dent = readdir(dp))) {
 		stat(dent ->d_name, &buf);
 		printf("Name : %s	", dent ->d_name);
-		if((buf.st_mode & S_IFMT == S_IFDIR)
+		if(buf.st_mode & S_IFDIR)
 			printf("Kind : directory\n");
 		else
 			printf("kind : file]\n");
