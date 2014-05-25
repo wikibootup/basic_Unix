@@ -1,0 +1,5 @@
+  PID TTY          TIME CMD
+ 1213 tty1     00:00:02 bash
+ 3872 tty1     00:00:00 mission12
+ 3874 tty1     00:00:00 ps
+/home/see/linux/basic_Unix/l3-quiz
