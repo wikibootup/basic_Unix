@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 //file name = time when program is executed (2014.xx.xx.log)
 	sprintf(fileName, "%d.%d.%d.log", 1900 + nowTime->tm_year, nowTime->tm_mon, nowTime->tm_mday);
 	
+//if file already exist, clean all memory in file.
 	fd = open(fileName, O_CREAT | O_TRUNC, 0644);
 	close(fd);
 
