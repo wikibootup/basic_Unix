@@ -5,9 +5,24 @@
 #include <stdio.h>
 #include <string.h>
 
+//added
+#include <signal.h>
+
+int pd;
+
+void handler(int signo)
+{
+	close(pd);
+	remove("./fifo");
+	exit(1);	
+}
+
 int main(void) {
-	int pd , n;
+	int n;
 	char msg[] = "Hello, FIFO";
+
+	//added
+	void (*hand)(int);	
 
 	printf("Server =====\n");
 
@@ -20,14 +35,20 @@ int main(void) {
 		perror("open");
 	}
 
-	printf("To Client : %s\n", msg);
-
 	if((n == write(pd, msg, strlen(msg)+1)) == -1) {
 		perror("write");
-		exit(1);
+		exit(1);	
+	}
+	
+
+	printf("To Client : %s\n", msg);
+
+	while(1)
+	{
+		hand = signal(SIGINT, handler);
 	}
 
-	close(pd);
-
+		
+	
 	return 0;
 	}
