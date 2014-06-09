@@ -6,6 +6,8 @@
 //for fork(), exec()
 #include <sys/types.h>
 #include <unistd.h>
+//for strlen()
+#include <string.h>
 
 void ReArrange_argv(int argc, char *argv[]);
 
@@ -15,6 +17,7 @@ void Fork_n_Exec_n_Rand(int number_of_processes, int possibilityOfSuccess,
 	int flag_v, int *fd, char *buf);
 
 const int maxMemSize = 5;
+char strTmp[3];
 
 int main(int argc, char *argv[])
 {
@@ -35,13 +38,14 @@ int main(int argc, char *argv[])
 	//for pipe()
 	int fd[2];
 	char buf[5];
-	
+//	char strTemp[3];	it is changed to global variable
 
 	if(pipe(fd) == -1)
 	{
 		perror("pipe");
 		exit(1);
 	}
+
 //
 //re-arrange argv by getopt()		
 	ReArrange_argv(argc, argv);
@@ -63,19 +67,22 @@ int main(int argc, char *argv[])
 	//optind is needed to set '1', because when getopt() is executed
 	//optind is moved to last argument number+1
 	optind =1;
-
-
+	
 	Getopt(argc, argv, &flag_v, &possibilityOfSuccess);
 	//
+	sprintf(strTmp, "%d", possibilityOfSuccess);
 
 	Fork_n_Exec_n_Rand(number_of_processes, possibilityOfSuccess, 
 		flag_v, fd, buf);
 
+
 		read(fd[0], buf, 5);
 
-	for(i=0 ; i<5 ; i++)
+
+	for(i=0; i<5 ; i++)
 	{
-		//this case is success or failure, so the process is generated
+	
+	//this case is success or failure, so the process is generated
 		if(buf[i])
 		{
 			if(buf[i] == '0'+1)
@@ -84,6 +91,8 @@ int main(int argc, char *argv[])
 					percentageOfFailure += 1;
 		}
 	}
+
+	i =0;
 
 	percentageOfSuccess = 
 		(percentageOfSuccess / (percentageOfSuccess + percentageOfFailure)) *100;
@@ -159,50 +168,30 @@ void Fork_n_Exec_n_Rand(int number_of_processes, int possibilityOfSuccess,
 					exit(1);
 					break;
 			case 0 : /* child process */
-				
-		
-				srand(time(NULL)*getpid());
-				randVal = rand() % 100 + 1;
-								
-				if( (randVal >100) ||  (randVal <0) )
+				if(flag_v == 1)
 				{
-					fprintf(stderr, "out of range of percentage. it should be 0~100\n");
+					if(execlp("./gambler", "./gambler", "-p", strTmp, "-v" ,
+							  (char*)NULL) == -1) {
+					perror("execlp");
 					exit(1);
+					}
 				}	
-					if(randVal < possibilityOfSuccess)
-					{
-						write(fd[1], "1", 1);
-						memSize++;
-						if(memSize > maxMemSize)
-						{
-							fprintf(stderr, "memory size can't size up more than 5\n");
-							exit(1);
-						}
-						if(flag_v == 1)								
-							printf("PID %d returned success\n", getpid());
+				if(flag_v == 0)
+				{
+					if(execlp("./gambler", "./gambler", "-p", strTmp, 
+								(char*)NULL) == -1) {
+					perror("execlp");
+					exit(1);
 					}
-					else
-					{
-						write(fd[1], "0", 1);
-						memSize++;
-						if(memSize >maxMemSize)
-						{
-							fprintf(stderr, "memory size can't size up more than 5\n");
-							exit(1);
-						}
-						if(flag_v == 1)
-							printf("PID %d returned failure\n", getpid());
-					}
-					exit(2);
+				}	
 					break;
 				default : /* parent process */
-					
 					while(wait(&status) != pid)
 						continue;
 					break;
 		}			
-	
 		number_of_processes--;
+	
 	}
 }
 
