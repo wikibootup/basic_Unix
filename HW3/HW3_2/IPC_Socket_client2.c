@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 	struct sockaddr_in sin;
 //	struct in_addr in;
 	int sd;
+	int n=0;
 
 
 //for socket
@@ -35,7 +36,7 @@ int main(int argc, char *argv[])
 
 	while(1) {
 
-		if(recv(sd, buf, sizeof(buf), 0) == -1) {
+		if(n=(recv(sd, buf, sizeof(buf), 0) == -1) ) {
 			perror("recv");
 			exit(1);
 		}		
@@ -47,9 +48,10 @@ int main(int argc, char *argv[])
 			exit(1);
 		}
 */
-			printf("c2 receive %s\n", buf);	
-
-
+	if(n>0){
+			puts(buf);
+			n =0;
+	}
 	}
 
 	return 0;

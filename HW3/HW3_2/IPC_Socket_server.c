@@ -51,12 +51,12 @@ int main(int argc, char *argv[])
 	printf("*Client2 connected!!\n");
 
 	while(1) {
-			scanf("%s", buf);
+//			scanf("%s", buf);
 			if(recv(ns, buf, sizeof(buf), 0) == -1) {
 				perror("recv");
 				exit(1);
 			}
-				
+					
 //			printf("s receive  %s\n", buf);
 
 			if(send(ns2, buf, strlen(buf)+1, 0) == -1) {
