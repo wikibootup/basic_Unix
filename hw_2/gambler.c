@@ -17,6 +17,7 @@ void Fork_n_Exec_n_Rand(int number_of_processes, int possibilityOfSuccess,
 
 const int maxMemSize = 10;
 char strTmp[3];
+int *fd;
 
 int main(int argc, char *argv[])
 {
@@ -36,21 +37,15 @@ int main(int argc, char *argv[])
 	int i;
 
 	//for pipe()
-	int fd[2];
 	char buf[10];
 
-	if(pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
 	Getopt(argc, argv, &flag_v, &possibilityOfSuccess);
 	//
 	Fork_n_Exec_n_Rand(number_of_processes, possibilityOfSuccess, 
 		flag_v, fd, buf);
 
-	close(fd[1]);
-	close(fd[0]);
+//	close(fd[1]);
+//	close(fd[0]);
 	exit(1);
 	return 0;
 }
@@ -60,13 +55,14 @@ int main(int argc, char *argv[])
 void Getopt(int argc, char *argv[], int *flag_v, int *possibilityOfSuccess)
 {
 	int n;
-	while( (n = getopt(argc, argv, "p:v") ) != -1) {
+	while( (n = getopt(argc, argv, "p:v:") ) != -1) {
 		switch(n) {
 			case 'p':
 				*possibilityOfSuccess = atoi(optarg);
 				break;
 			case 'v':
 				*flag_v = 1;
+				fd = (int*)optarg;
 				break;
 		}
 	}	
@@ -105,7 +101,6 @@ void Fork_n_Exec_n_Rand(int number_of_processes, int possibilityOfSuccess,
 								printf("PID %d returned success\n", getpid());
 								exit(1);
 						}
-								kill(getpid(), SIGQUIT);
 	
 					}	
 					else
@@ -123,9 +118,7 @@ void Fork_n_Exec_n_Rand(int number_of_processes, int possibilityOfSuccess,
 							exit(1);
 						}
 
-								kill(getpid(), SIGQUIT);
 					}
-					
 			exit(1);//all jobs are done, then exit child process, that is gambler	
 }
 

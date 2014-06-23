@@ -1,0 +1,30 @@
+#Makefile
+
+count_process_server : count_process_server.o
+					gcc -o	count_process_server	count_process_server.c
+					gcc -o	count_process_client	count_process_client.c
+
+count_process_client : count_process_client.o
+					gcc -o	count_process_server	count_process_server.c
+					gcc -o	count_process_client	count_process_client.c
+
+
+
+count_process_server.o :	count_process_server.c
+					gcc -c count_process_server.c
+					gcc -c count_process_client.c
+
+count_process_client.o :	count_process_client.c
+					gcc -c count_process_server.c
+					gcc -c count_process_client.c
+
+clean :
+					rm count_process_server.o |
+					count_process_server |
+					count_process_client.o |
+					count_process_client
+#
+
+
+  
+

@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 
 		read(fd[0], buf, 5);
 
-
+	printf("ddasdfasdf\n");
 	for(i=0; i<5 ; i++)
 	{
 	
@@ -170,7 +170,7 @@ void Fork_n_Exec_n_Rand(int number_of_processes, int possibilityOfSuccess,
 			case 0 : /* child process */
 				if(flag_v == 1)
 				{
-					if(execlp("./gambler", "./gambler", "-p", strTmp, "-v" ,
+					if(execlp("./gambler", "./gambler", "-p", strTmp, "-v" , &fd,
 							  (char*)NULL) == -1) {
 					perror("execlp");
 					exit(1);
@@ -178,7 +178,7 @@ void Fork_n_Exec_n_Rand(int number_of_processes, int possibilityOfSuccess,
 				}	
 				if(flag_v == 0)
 				{
-					if(execlp("./gambler", "./gambler", "-p", strTmp, 
+					if(execlp("./gambler", "./gambler", "-p", strTmp, &fd,
 								(char*)NULL) == -1) {
 					perror("execlp");
 					exit(1);
