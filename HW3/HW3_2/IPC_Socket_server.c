@@ -6,16 +6,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-//#define PORTNUM 5000
-char msg[50] = {};
 
 int main(int argc, char *argv[])
 {
 	char buf[256];
-	struct sockaddr_in sin, cli;
+	struct sockaddr_in sin, cli, cli2;
 	struct in_addr in;
 	int sd, ns, clientlen = sizeof(cli);
-
+	int ns2, clientlen2 = sizeof(cli2);
 
 	if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		perror("socket");
@@ -32,7 +30,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	if(listen(sd,1)) {
+	if(listen(sd,2)) {
 		perror("listen");
 		exit(1);
 	}
@@ -43,22 +41,33 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-//	printf("*Client connected!!\n");
+	printf("*Client1 connected!!\n");
+
+	if((ns2 = accept(sd, (struct sockaddr *)&cli2, &clientlen2)) == -1) {
+		perror("accept");
+		exit(1);
+	}
+
+	printf("*Client2 connected!!\n");
 
 	while(1) {
+			scanf("%s", buf);
 			if(recv(ns, buf, sizeof(buf), 0) == -1) {
+				perror("recv");
+				exit(1);
+			}
+				
+//			printf("s receive  %s\n", buf);
+
+			if(send(ns2, buf, strlen(buf)+1, 0) == -1) {
 				perror("send");
 				exit(1);
 			}
 	
-		if(buf[0] == 'q') {
-			close(ns);
-			close(sd);
-
-			exit(1);	
 		}
-	}
+
 	close(ns);
+	close(ns2);
 	close(sd);
 
 	return 0;

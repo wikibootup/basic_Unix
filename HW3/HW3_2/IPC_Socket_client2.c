@@ -34,20 +34,20 @@ int main(int argc, char *argv[])
 	}
 
 	while(1) {
-/*
+
 		if(recv(sd, buf, sizeof(buf), 0) == -1) {
 			perror("recv");
 			exit(1);
-		}	
-*/	
-		scanf("%s", buf);	
-//		printf("c receive %s\n", buf);	
+		}		
+/*		gets(buf);	
+		printf("c receive %s\n", buf);	
 
 		if(send(sd, buf, strlen(buf)+1, 0) == -1) {
 			perror("send");
 			exit(1);
 		}
-			printf("c receive %s\n", buf);	
+*/
+			printf("c2 receive %s\n", buf);	
 
 
 	}
