@@ -35,16 +35,15 @@ int main(int argc, char *argv[])
 
 	while(1) {
 
-	
-		scanf("%s", buf);
+		scanf("%[^\n]", buf);
 
-		if(send(sd, buf, strlen(buf)+1, 0) == -1) {
-			perror("send");
-			exit(1);
+		if(strlen(buf)) {
+			if(send(sd, buf, strlen(buf)+1, 0) == -1) {
+				perror("send");
+				exit(1);
+			}
+			memset(buf, 0, sizeof(buf));
 		}
-//			printf("c receive %s\n", buf);	
-
-
 	}
 
 	return 0;

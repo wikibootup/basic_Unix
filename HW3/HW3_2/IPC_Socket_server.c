@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 	struct in_addr in;
 	int sd, ns, clientlen = sizeof(cli);
 	int ns2, clientlen2 = sizeof(cli2);
+	int n;
 
 	if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		perror("socket");
@@ -51,21 +52,21 @@ int main(int argc, char *argv[])
 	printf("*Client2 connected!!\n");
 
 	while(1) {
-//			scanf("%s", buf);
+
 			if(recv(ns, buf, sizeof(buf), 0) == -1) {
 				perror("recv");
 				exit(1);
 			}
-					
-//			printf("s receive  %s\n", buf);
 
-			if(send(ns2, buf, strlen(buf)+1, 0) == -1) {
-				perror("send");
-				exit(1);
+			if(strlen(buf)) {
+
+				if(send(ns2, buf, strlen(buf)+1, 0) == -1) {
+					perror("send");
+					exit(1);
+				}
 			}
-	
-		}
-
+		
+	}
 	close(ns);
 	close(ns2);
 	close(sd);
